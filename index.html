@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pistecams TV</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGNsaXBQYXRoIGlkPSJjIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxNCIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjKSI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMWM2NmIwIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSIxMyIgcj0iNSIgZmlsbD0iI2ZmZDI1YSIvPjxwYXRoIGQ9Ik0tMiA2MCBMMjIgMTggTDM0IDM0IEw0MyAyMyBMNjYgNjAgWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik0yMiAxOCBMMjggMjggTDI0IDI2IEwyMCAzMCBMMTcgMjcgWiIgZmlsbD0iI2M5ZDllNSIvPjxwYXRoIGQ9Ik0tMiA2MiBMNjYgNDIgTDY2IDY2IEwtMiA2NiBaIiBmaWxsPSIjZTZlZmY2Ii8+PGcgc3Ryb2tlPSIjYzkzMDJhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMzQgMzggTDM5IDQ2IEw0NSA0NyIvPjxwYXRoIGQ9Ik0zOSA0NiBMMzYgNTIiLz48cGF0aCBkPSJNMzQgMzggTDI4IDQyIi8+PHBhdGggZD0iTTM1IDQwIEw0MiAzOSIvPjwvZz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyLjUiIHI9IjMuOCIgZmlsbD0iI2M5MzAyYSIvPjxwYXRoIGQ9Ik0yNCA1NiBMNTIgNDgiIHN0cm9rZT0iIzExMjIyZSIgc3Ryb2tlLXdpZHRoPSIzLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0yOCA0MiBMMjMgNTQgTTQyIDM5IEw0OCA1MCIgc3Ryb2tlPSIjMTEyMjJlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvZz48L3N2Zz4K">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Barlow:wght@400;600&display=swap">
+<style>
+/* TV-ontwerp: één scherm zonder scrollen, donker, groot, bediening met pijltjes en OK. */
+:root{
+  --bg:#0b1218; --panel:#16232d; --line:#2a3b47; --ink:#eef4f8; --muted:#9db1be;
+  --accent:#e2524b; --focus:#ffd25a; --snow:#8fd0ff;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Barlow","Segoe UI",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font:2.2vh/1.3 var(--body);cursor:default}
+#app{position:absolute;top:0;left:0;right:0;bottom:0;padding:2.5vh 2.5vw;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column}
+header{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;height:7vh;margin-bottom:2vh}
+header img{height:6vh;width:6vh;margin-right:1.2vw}
+h1{font:700 5vh/1 var(--display);letter-spacing:.02em;text-transform:uppercase}
+h1 span{color:var(--accent)}
+.page{margin-left:1.5vw;color:var(--muted);font-size:2.4vh}
+.clock{margin-left:auto;text-align:right}
+.clock b{display:block;font:700 5vh/1 var(--display);letter-spacing:.03em}
+.clock small{color:var(--muted);font-size:2.2vh}
+#grid{-webkit-flex:1;flex:1;display:grid;grid-gap:1.6vh 1.2vw;min-height:0}
+.tile{position:relative;overflow:hidden;border-radius:1vh;background:#000;outline:none;border:.45vh solid transparent;-webkit-transition:border-color .15s,-webkit-transform .15s;transition:border-color .15s,transform .15s}
+.tile:focus,.tile.sel{border-color:var(--focus);-webkit-transform:scale(1.025);transform:scale(1.025);z-index:2;box-shadow:0 0 0 .4vh rgba(255,210,90,.35),0 1.5vh 4vh rgba(0,0,0,.6)}
+.tile img,.tile iframe,.tile video{position:absolute;top:0;left:0;width:100%;height:100%;border:0;object-fit:cover;display:block}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:5vh 1.2vw 1.2vh;background:linear-gradient(to top,rgba(0,0,0,.85),rgba(0,0,0,0))}
+.cap b{display:block;font:700 3.4vh/1.05 var(--display);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cap span{color:#d4e0e8;font-size:2.2vh}
+.badge{position:absolute;top:1.2vh;right:1vw;background:rgba(5,12,18,.82);border:1px solid rgba(143,208,255,.35);border-radius:.8vh;padding:.5vh .8vw;font:700 2.8vh/1 var(--display);color:var(--snow)}
+.badge small{font:600 1.6vh var(--body);color:var(--muted);margin-right:.4vw;text-transform:uppercase;letter-spacing:.08em}
+.empty{position:absolute;top:0;left:0;right:0;bottom:0;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;color:var(--muted);font-size:2.4vh;text-align:center;padding:2vh}
+footer{height:5vh;margin-top:1.6vh;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;color:var(--muted);font-size:2.2vh;white-space:nowrap;overflow:hidden}
+footer kbd{display:inline-block;font:700 2vh var(--body);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:.6vh;padding:.2vh .6vw;margin-right:.5vw}
+footer .k{margin-right:2.2vw}
+footer .src{margin-left:auto}
+/* groot beeld */
+#big{position:absolute;top:0;left:0;right:0;bottom:0;background:#000;z-index:10}
+#bigMedia{position:absolute;top:0;left:0;right:0;bottom:0}
+#bigMedia img,#bigMedia video,#bigMedia iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;object-fit:contain;background:#000}
+#bigBar{position:absolute;left:0;right:0;bottom:0;padding:8vh 3vw 3vh;background:linear-gradient(to top,rgba(0,0,0,.9),rgba(0,0,0,0));display:-webkit-flex;display:flex;-webkit-align-items:flex-end;align-items:flex-end}
+#bigBar h2{font:700 6.5vh/1 var(--display);text-transform:uppercase;letter-spacing:.02em}
+#bigBar p{font-size:2.8vh;color:#d4e0e8;margin-top:.8vh}
+#bigSnow{margin-left:auto;text-align:right}
+#bigSnow b{font:700 6vh/1 var(--display);color:var(--snow)}
+#bigSnow small{display:block;font-size:2.2vh;color:var(--muted);margin-top:.6vh}
+#bigTop{position:absolute;top:2.5vh;left:3vw;right:3vw;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;font-size:2.4vh;color:#d4e0e8;text-shadow:0 1px 4px #000}
+#bigTop .clock{text-shadow:0 1px 6px #000}
+#bigIdx{background:rgba(0,0,0,.55);border-radius:.8vh;padding:.6vh 1vw}
+#show{position:absolute;left:0;bottom:0;height:.8vh;background:var(--focus);width:0}
+.pill{display:inline-block;margin-left:1vw;background:var(--accent);color:#fff;border-radius:.8vh;padding:.5vh 1vw;font:700 2.2vh var(--body)}
+#toast{position:absolute;top:4vh;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:1vh;padding:1.4vh 2vw;font-size:2.6vh;z-index:20}
+@media (prefers-reduced-motion:reduce){.tile{-webkit-transition:none;transition:none}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGNsaXBQYXRoIGlkPSJjIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxNCIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjKSI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMWM2NmIwIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSIxMyIgcj0iNSIgZmlsbD0iI2ZmZDI1YSIvPjxwYXRoIGQ9Ik0tMiA2MCBMMjIgMTggTDM0IDM0IEw0MyAyMyBMNjYgNjAgWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik0yMiAxOCBMMjggMjggTDI0IDI2IEwyMCAzMCBMMTcgMjcgWiIgZmlsbD0iI2M5ZDllNSIvPjxwYXRoIGQ9Ik0tMiA2MiBMNjYgNDIgTDY2IDY2IEwtMiA2NiBaIiBmaWxsPSIjZTZlZmY2Ii8+PGcgc3Ryb2tlPSIjYzkzMDJhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMzQgMzggTDM5IDQ2IEw0NSA0NyIvPjxwYXRoIGQ9Ik0zOSA0NiBMMzYgNTIiLz48cGF0aCBkPSJNMzQgMzggTDI4IDQyIi8+PHBhdGggZD0iTTM1IDQwIEw0MiAzOSIvPjwvZz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyLjUiIHI9IjMuOCIgZmlsbD0iI2M5MzAyYSIvPjxwYXRoIGQ9Ik0yNCA1NiBMNTIgNDgiIHN0cm9rZT0iIzExMjIyZSIgc3Ryb2tlLXdpZHRoPSIzLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0yOCA0MiBMMjMgNTQgTTQyIDM5IEw0OCA1MCIgc3Ryb2tlPSIjMTEyMjJlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvZz48L3N2Zz4K" alt="">
+    <h1>Piste<span>cams</span></h1>
+    <div class="page" id="pageInfo"></div>
+    <div class="clock"><b id="clock">--:--</b><small id="date"></small></div>
+  </header>
+  <main id="grid"></main>
+  <footer>
+    <span class="k"><kbd>◀ ▲ ▼ ▶</kbd>kiezen</span>
+    <span class="k"><kbd>OK</kbd>groot beeld</span>
+    <span class="k"><kbd>▶‖</kbd>of <kbd>GEEL</kbd>diashow</span>
+    <span class="k" id="pageHint" hidden><kbd>CH ▲▼</kbd>volgende pagina</span>
+    <span class="src">Sneeuwhoogte: sneeuwhoogte.nl</span>
+  </footer>
+</div>
+
+<div id="big" hidden>
+  <div id="bigMedia"></div>
+  <div id="bigTop"><span id="bigIdx"></span><span class="pill" id="bigShow" hidden>DIASHOW</span><div class="clock"><b id="clock2">--:--</b></div></div>
+  <div id="bigBar">
+    <div><h2 id="bigName"></h2><p id="bigMeta"></p></div>
+    <div id="bigSnow"></div>
+  </div>
+  <div id="show"></div>
+</div>
+<div id="toast" hidden></div>
+
+<script>
+(function(){
+  'use strict';
+  // Werkt ook in oudere Samsung-tv-browsers: alleen ES5, geen moderne CSS of JavaScript.
+  var FALLBACK=[{"id": "d1", "url": "https://webtvfc.feratel.com/webtv/?design=v5&pg=DA7D2F22-8600-464D-9D4F-CDB04014A6C5&cam=5216&lg=de&sound=muted", "name": "Achterjet bergstation", "area": "Flachau", "alt": 1600, "type": "auto"}, {"id": "d2", "url": "https://webtvfc.feratel.com/webtv/?design=v5&pg=DA7D2F22-8600-464D-9D4F-CDB04014A6C5&cam=5635&lg=nl&sound=muted", "name": "Penkenbaan", "area": "Mayrhofen", "alt": 2000, "type": "auto"}, {"id": "d3", "url": "https://webtvfc.feratel.com/webtv/?design=v5&pg=DA7D2F22-8600-464D-9D4F-CDB04014A6C5&cam=5552&lg=nl&sound=muted", "name": "Gefrorene Wand", "area": "Hintertux", "alt": 3250, "type": "auto"}, {"id": "d4", "url": "https://webtvfc.feratel.com/webtv/?design=v5&pg=DA7D2F22-8600-464D-9D4F-CDB04014A6C5&cam=5226&lg=nl&sound=muted", "name": "Isskogel", "area": "Gerlos", "alt": 1900, "type": "auto"}, {"id": "d5", "url": "https://webtvfc.feratel.com/webtv/?cam=5244&design=v5&c0=0&c2=1&c27=1&c45=1&sound=0&lg=nl&pg=DA7D2F22-8600-464D-9D4F-CDB04014A6C5&s=0", "name": "Kohlmaiskopf", "area": "Saalbach", "alt": 1794, "type": "auto"}, {"id": "d6", "url": "https://webtv.feratel.com/webtv/?design=v3&pg=88803C51-0772-44C5-B2C0-8548D51BB270&cam=5542&lg=nl", "name": "Möseralm", "area": "Fiss", "alt": 1812, "type": "auto"}, {"id": "d7", "url": "https://webtvfc.feratel.com/webtv/?design=v5&pg=DA7D2F22-8600-464D-9D4F-CDB04014A6C5&cam=5762&lg=nl&sound=muted", "name": "Giggijoch", "area": "Sölden", "alt": 2275, "type": "auto"}, {"id": "d8", "url": "https://webtvfc.feratel.com/webtv/?design=v5&pg=DA7D2F22-8600-464D-9D4F-CDB04014A6C5&cam=5763&lg=nl&sound=muted", "name": "Schwarze Schneid Mittelstation", "area": "Sölden", "alt": 3000, "type": "auto"}];
+  var SHOW_SEC=20, GRID_REFRESH_SEC=60;
+  var cams=[], snow=null, page=0, sel=0, perPage=8, cols=4, rows=2;
+  var bigIdx=-1, showOn=false, showTimer=null, showStart=0;
+
+  function $(id){return document.getElementById(id);}
+  function el(tag,cls,text){var n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n;}
+  function pad(n){return (n<10?'0':'')+n;}
+  function bust(u){return u+(u.indexOf('?')>-1?'&':'?')+'_t='+Date.now();}
+  function toast(t){var x=$('toast');x.textContent=t;x.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){x.hidden=true;},2500);}
+
+  // ---------- webcams ----------
+  function feratelCam(u){var m=/feratel\.com\/webtv\/[^#]*[?&]cam=(\d+)/i.exec(u||'');return m?m[1]:null;}
+  function soort(c){
+    if(c.type&&c.type!=='auto')return c.type;
+    if(feratelCam(c.url))return 'feratel';
+    var pad=(c.url||'').split('?')[0];
+    if(/\.(jpe?g|png|gif|webp)$/i.test(pad))return 'img';
+    if(/\.(mp4|webm)$/i.test(pad))return 'video';
+    return 'frame';
+  }
+  function stilBeeld(c){var id=feratelCam(c.url);if(id)return 'https://wtvpictfc.feratel.com/picture/35/'+id+'.jpeg?design=noxdesign&dcsdesign=WTP_feratel.com';if(soort(c)==='img')return c.url;return null;}
+  function geldig(list){return list&&list.length&&list.every?list.filter(function(c){return c&&typeof c.url==='string'&&/^https?:/.test(c.url);}):[];}
+
+  function laadCams(klaar){
+    // 1. Een lijst die in deze browser al via de gewone site is opgeslagen.
+    try{var s=JSON.parse(localStorage.getItem('pistecams.v1')||'null');if(s&&geldig(s.cams).length){return klaar(geldig(s.cams));}}catch(e){}
+    // 2. De vaste webcams uit de gewone site, zodat deze pagina altijd gelijk loopt.
+    //    Eerst een map hoger (tv in de map cams), daarna de site cams zelf (tv als eigen repository).
+    var paden=['../index.html','/cams/index.html'];
+    (function probeer(i){
+      if(i>=paden.length)return klaar(FALLBACK);
+      var x=new XMLHttpRequest();
+      x.open('GET',paden[i]+'?_='+Date.now(),true);
+      x.timeout=10000;
+      x.onload=function(){
+        var m=/var DEFAULTS=(\[[\s\S]*?\]);/.exec(x.status===200?x.responseText||'':'');
+        var l=null;try{l=m&&geldig(JSON.parse(m[1]));}catch(e){}
+        if(l&&l.length)klaar(l);else probeer(i+1);
+      };
+      x.onerror=x.ontimeout=function(){probeer(i+1);};
+      x.send();
+    })(0);
+  }
+
+  // ---------- sneeuwhoogte ----------
+  function norm(t){
+    t=String(t||'').replace(/^\s+|\s+$/g,'').toLowerCase();
+    if(t.normalize)t=t.normalize('NFC');
+    t=t.replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss');
+    if(t.normalize)t=t.normalize('NFD').replace(/[̀-ͯ]/g,'');
+    t=t.replace(/ae/g,'a').replace(/oe/g,'o').replace(/ue/g,'u');
+    return t.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  }
+  function subset(a,b){for(var i=0;i<a.length;i++){if(b.indexOf(a[i])<0)return false;}return true;}
+  function kleiner(a,b){for(var i=0;i<a.length;i++){if(a[i]!==b[i])return a[i]<b[i];}return false;}
+  function zoekPlaats(naam,plaatsen){
+    var doel=norm(naam);if(!doel)return null;
+    var woorden=doel.split('-'),beste=null,bs=null;
+    plaatsen.forEach(function(p){
+      var dorp=norm(p.naam),gebied=norm(p.skigebied),slug=norm(p.url.split('/').pop()),score;
+      if(doel===dorp||doel===slug)score=1;
+      else if(doel===gebied)score=2;
+      else if(subset(woorden,dorp.split('-').concat(slug.split('-'))))score=3;
+      else if(subset(woorden,gebied.split('-')))score=4;
+      else{
+        var alle=dorp.split('-').concat(slug.split('-'),gebied.split('-'));
+        if(woorden.every(function(w){return w.length>=4&&alle.some(function(x){return x.indexOf(w)===0;});}))score=5;
+        else return;
+      }
+      var k=[score,dorp&&gebied.split('-').indexOf(dorp)>=0?0:1,-(p.berg==null?-1:p.berg),p.naam.length];
+      if(!bs||kleiner(k,bs)){bs=k;beste=p;}
+    });
+    return beste;
+  }
+  function sneeuwVoor(area){
+    if(!snow||!area)return null;
+    var pl=snow.plaatsen||[],kop=snow.koppelingen||{},url=null,k,p=null,i;
+    for(k in kop){if(k.toLowerCase()===String(area).trim().toLowerCase()){url=kop[k];break;}}
+    if(url){for(i=0;i<pl.length;i++){if(pl[i].url===url){p=pl[i];break;}}if(!p)p={naam:area,url:url,berg:null,dal:null};}
+    else p=zoekPlaats(area,pl);
+    if(!p)return null;
+    var d={},det=(snow.details||{})[p.url]||{};
+    for(k in p)d[k]=p[k];for(k in det)d[k]=det[k];
+    return d;
+  }
+  function laadSneeuw(){
+    var paden=['../sneeuw.json','sneeuw.json','/cams/sneeuw.json'];
+    (function probeer(i){
+      if(i>=paden.length)return;
+      var x=new XMLHttpRequest();x.open('GET',paden[i]+'?_='+Date.now(),true);x.timeout=15000;
+      x.onload=function(){var j=null;try{j=JSON.parse(x.responseText);}catch(e){}
+        if(x.status===200&&j&&j.plaatsen){snow=j;teken();if(bigIdx>=0)toonGroot(bigIdx);}else probeer(i+1);};
+      x.onerror=x.ontimeout=function(){probeer(i+1);};
+      x.send();
+    })(0);
+  }
+
+  // ---------- overzicht ----------
+  function indeling(n){
+    if(n<=1)return [1,1];if(n<=2)return [2,1];if(n<=4)return [2,2];if(n<=6)return [3,2];
+    if(n<=8)return [4,2];if(n<=9)return [3,3];return [4,3];
+  }
+  function teken(){
+    var n=cams.length,ind=indeling(n),grid=$('grid');
+    cols=ind[0];rows=ind[1];perPage=cols*rows;
+    var pages=Math.max(1,Math.ceil(n/perPage));
+    if(page>=pages)page=pages-1;
+    grid.style.gridTemplateColumns='repeat('+cols+',1fr)';
+    grid.style.gridTemplateRows='repeat('+rows+',1fr)';
+    grid.innerHTML='';
+    if(!n){var e=el('div','empty','Geen webcams gevonden. Voeg ze toe op de gewone Pistecams-site.');grid.appendChild(e);return;}
+    for(var i=page*perPage;i<Math.min(n,(page+1)*perPage);i++)grid.appendChild(tegel(i));
+    $('pageInfo').textContent=pages>1?'Pagina '+(page+1)+' van '+pages:n+' webcams';
+    $('pageHint').hidden=pages<2;
+    if(sel<page*perPage||sel>=Math.min(n,(page+1)*perPage))sel=page*perPage;
+    focus();
+  }
+  function tegel(i){
+    var c=cams[i],t=el('div','tile'),k=soort(c),beeld=stilBeeld(c);
+    t.tabIndex=0;t.setAttribute('data-i',i);
+    if(beeld){
+      var img=el('img');img.alt='';img.setAttribute('data-src',beeld);img.src=bust(beeld);
+      img.onerror=function(){if(!t.querySelector('.empty'))t.appendChild(el('div','empty','Beeld laadt niet'));};
+      img.onload=function(){var f=t.querySelector('.empty');if(f)f.parentNode.removeChild(f);};
+      t.appendChild(img);
+    }else if(k==='video'){
+      var v=el('video');v.muted=true;v.setAttribute('muted','');v.autoplay=true;v.loop=true;v.setAttribute('playsinline','');v.src=c.url;t.appendChild(v);
+    }else{
+      var f=el('iframe');f.src=c.url;f.setAttribute('tabindex','-1');f.setAttribute('allow','autoplay');t.appendChild(f);
+    }
+    var s=sneeuwVoor(c.area);
+    if(s&&(s.berg!=null||s.dal!=null)){
+      var b=el('div','badge');b.appendChild(el('small',null,'berg'));b.appendChild(document.createTextNode(s.berg==null?'-':s.berg+' cm'));t.appendChild(b);
+    }
+    var cap=el('div','cap');cap.appendChild(el('b',null,c.name||'Webcam'));
+    cap.appendChild(el('span',null,[c.area,c.alt?Number(c.alt).toLocaleString('nl-NL')+' m':''].filter(Boolean).join(' · ')));
+    t.appendChild(cap);
+    t.onclick=function(){sel=i;toonGroot(i);};
+    t.onmouseenter=function(){sel=i;focus();};
+    return t;
+  }
+  function focus(){
+    var tiles=$('grid').querySelectorAll('.tile');
+    for(var j=0;j<tiles.length;j++){
+      var on=+tiles[j].getAttribute('data-i')===sel;
+      tiles[j].className='tile'+(on?' sel':'');
+      if(on&&bigIdx<0){try{tiles[j].focus({preventScroll:true});}catch(e){tiles[j].focus();}}
+    }
+  }
+  function verplaats(dx,dy){
+    var n=cams.length;if(!n)return;
+    var start=page*perPage,local=sel-start,r=Math.floor(local/cols),c=local%cols;
+    var pages=Math.ceil(n/perPage),count=Math.min(n,start+perPage)-start;
+    if(dx){
+      c+=dx;
+      if(c<0){if(page>0){page--;teken();sel=Math.min(n-1,page*perPage+r*cols+cols-1);focus();return;}c=0;}
+      if(c>=cols||r*cols+c>=count){if(page<pages-1){page++;teken();sel=page*perPage+Math.min(r*cols,Math.min(n,(page+1)*perPage)-page*perPage-1);focus();return;}c=Math.min(cols-1,count-1-r*cols);}
+    }
+    if(dy){r+=dy;if(r<0)r=0;if(r>=rows||r*cols+c>=count){r=Math.max(0,Math.min(rows-1,Math.floor((count-1-c)/cols)));}}
+    sel=start+Math.max(0,Math.min(count-1,r*cols+c));focus();
+  }
+  function bladeren(d){
+    var pages=Math.ceil(cams.length/perPage);if(pages<2)return;
+    page=(page+d+pages)%pages;sel=page*perPage;teken();
+  }
+  function ververs(){
+    var imgs=$('grid').querySelectorAll('img[data-src]');
+    for(var i=0;i<imgs.length;i++)imgs[i].src=bust(imgs[i].getAttribute('data-src'));
+  }
+
+  // ---------- groot beeld en diashow ----------
+  function toonGroot(i){
+    var n=cams.length;if(!n)return;
+    i=(i+n)%n;bigIdx=i;sel=i;
+    var c=cams[i],k=soort(c),box=$('bigMedia'),id=feratelCam(c.url);
+    box.innerHTML='';
+    if(id){
+      var v=el('video');v.muted=true;v.setAttribute('muted','');v.autoplay=true;v.loop=true;v.setAttribute('playsinline','');
+      v.poster=stilBeeld(c);
+      v.onerror=function(){var f=el('iframe');f.src=c.url;f.setAttribute('allow','autoplay');if(v.parentNode)v.parentNode.replaceChild(f,v);};
+      v.src=bust('https://stsfc001.feratel.com/streams/latest/1/'+id+'.mp4?dcsdesign=WTP_feratel.com');
+      box.appendChild(v);var p=v.play&&v.play();if(p&&p.catch)p.catch(function(){});
+    }else if(k==='img'){var im=el('img');im.src=bust(c.url);box.appendChild(im);}
+    else if(k==='video'){var vv=el('video');vv.muted=true;vv.autoplay=true;vv.loop=true;vv.src=c.url;box.appendChild(vv);}
+    else{var f=el('iframe');f.src=c.url;f.setAttribute('allow','autoplay');box.appendChild(f);}
+    $('bigName').textContent=c.name||'Webcam';
+    $('bigMeta').textContent=[c.area,c.alt?Number(c.alt).toLocaleString('nl-NL')+' m':''].filter(Boolean).join(' · ');
+    $('bigIdx').textContent=(i+1)+' / '+n;
+    var s=sneeuwVoor(c.area),sn=$('bigSnow');sn.innerHTML='';
+    if(s){
+      if(s.berg!=null||s.dal!=null){sn.appendChild(el('b',null,'Berg '+(s.berg==null?'-':s.berg+' cm')+'  ·  Dal '+(s.dal==null?'-':s.dal+' cm')));}
+      else sn.appendChild(el('b',null,'Nog geen sneeuw gemeld'));
+      var extra=[];if(s.laatste_sneeuwval)extra.push('Laatste sneeuw '+s.laatste_sneeuwval);if(s.pistes_open)extra.push('Pistes open '+s.pistes_open);
+      if(extra.length)sn.appendChild(el('small',null,extra.join('  ·  ')));
+    }
+    $('big').hidden=false;
+    if(showOn)startBalk();
+  }
+  function sluitGroot(){
+    stopShow(true);bigIdx=-1;$('big').hidden=true;$('bigMedia').innerHTML='';
+    page=Math.floor(sel/perPage);teken();
+  }
+  function startBalk(){
+    showStart=Date.now();var bar=$('show');bar.style.width='0';
+  }
+  function tikShow(){
+    if(!showOn)return;
+    var f=(Date.now()-showStart)/(SHOW_SEC*1000);
+    $('show').style.width=Math.min(100,f*100)+'%';
+    if(f>=1)toonGroot(bigIdx+1);
+  }
+  function startShow(){
+    if(!cams.length)return;
+    showOn=true;$('bigShow').hidden=false;
+    if(bigIdx<0)toonGroot(sel);else startBalk();
+    clearInterval(showTimer);showTimer=setInterval(tikShow,250);
+    toast('Diashow gestart. Elke '+SHOW_SEC+' seconden een andere webcam.');
+  }
+  function stopShow(stil){
+    if(!showOn)return;
+    showOn=false;clearInterval(showTimer);$('bigShow').hidden=true;$('show').style.width='0';
+    if(!stil)toast('Diashow gestopt');
+  }
+  function wisselShow(){if(showOn)stopShow();else startShow();}
+
+  // ---------- afstandsbediening ----------
+  var KEY={left:[37],up:[38],right:[39],down:[40],ok:[13],back:[10009,8,27,461],
+    play:[415,19,10252,32,80],yellow:[405,89],chUp:[427,33],chDown:[428,34],red:[403,82]};
+  function is(code,naam){return KEY[naam].indexOf(code)>=0;}
+  function registreerToetsen(){
+    try{
+      if(window.tizen&&tizen.tvinputdevice){
+        ['MediaPlayPause','MediaPlay','MediaPause','ColorF0Red','ColorF2Yellow','ChannelUp','ChannelDown'].forEach(function(k){
+          try{tizen.tvinputdevice.registerKey(k);}catch(e){}
+        });
+      }
+    }catch(e){}
+  }
+  document.addEventListener('keydown',function(e){
+    var k=e.keyCode,groot=bigIdx>=0,klaar=true;
+    if(is(k,'play')||is(k,'yellow'))wisselShow();
+    else if(is(k,'red')){location.reload();}
+    else if(groot){
+      if(is(k,'left')){toonGroot(bigIdx-1);}
+      else if(is(k,'right')){toonGroot(bigIdx+1);}
+      else if(is(k,'back')||is(k,'ok')||is(k,'up')||is(k,'down'))sluitGroot();
+      else if(is(k,'chUp'))toonGroot(bigIdx+1);
+      else if(is(k,'chDown'))toonGroot(bigIdx-1);
+      else klaar=false;
+    }else{
+      if(is(k,'left'))verplaats(-1,0);
+      else if(is(k,'right'))verplaats(1,0);
+      else if(is(k,'up'))verplaats(0,-1);
+      else if(is(k,'down'))verplaats(0,1);
+      else if(is(k,'ok'))toonGroot(sel);
+      else if(is(k,'chUp'))bladeren(1);
+      else if(is(k,'chDown'))bladeren(-1);
+      else klaar=false;   // Terug in het overzicht: laat de tv de browser sluiten.
+    }
+    if(klaar)e.preventDefault();
+  });
+  $('big').onclick=function(){sluitGroot();};
+
+  // ---------- klok en wakker blijven ----------
+  var dagen=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+  var maanden=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  function klok(){
+    var d=new Date(),t=pad(d.getHours())+':'+pad(d.getMinutes());
+    $('clock').textContent=t;$('clock2').textContent=t;
+    $('date').textContent=dagen[d.getDay()]+' '+d.getDate()+' '+maanden[d.getMonth()];
+  }
+  function wakker(){
+    try{if(navigator.wakeLock&&document.visibilityState==='visible')navigator.wakeLock.request('screen').catch(function(){});}catch(e){}
+    try{if(window.webapis&&webapis.appcommon)webapis.appcommon.setScreenSaver(webapis.appcommon.AppCommonScreenSaverState.SCREEN_SAVER_OFF);}catch(e){}
+  }
+  document.addEventListener('visibilitychange',wakker);
+
+  window.__tv={zoekPlaats:zoekPlaats,indeling:indeling,state:function(){return {sel:sel,page:page,bigIdx:bigIdx,showOn:showOn,cols:cols,rows:rows,n:cams.length};},SHOW:function(s){SHOW_SEC=s;}};
+
+  registreerToetsen();klok();setInterval(klok,10000);wakker();
+  laadCams(function(l){cams=l;teken();laadSneeuw();});
+  setInterval(function(){if(!document.hidden)ververs();},GRID_REFRESH_SEC*1000);
+  setInterval(laadSneeuw,30*60*1000);
+  // Elke 6 uur de hele pagina vernieuwen (nieuwe versie en geheugen), niet tijdens groot beeld.
+  setInterval(function(){if(bigIdx<0)location.reload();},6*3600*1000);
+})();
+</script>
+</body>
+</html>
