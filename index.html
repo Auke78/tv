@@ -216,13 +216,20 @@ footer .src{margin-left:auto}
     t.tabIndex=0;t.setAttribute('data-i',i);
     if(beeld){
       var img=el('img');img.alt='';img.setAttribute('data-src',beeld);img.src=bust(beeld);
-      img.onerror=function(){if(!t.querySelector('.empty'))t.appendChild(el('div','empty','Beeld laadt niet'));};
+      img.onerror=function(){
+        // Feratel geeft de foto niet los vrij: toon dan de gewone speler van deze webcam.
+        if(feratelCam(c.url)&&img.parentNode){
+          var f=el('iframe');f.src=c.url;f.setAttribute('tabindex','-1');f.setAttribute('allow','autoplay');
+          f.style.pointerEvents='none';img.parentNode.replaceChild(f,img);return;
+        }
+        if(!t.querySelector('.empty'))t.appendChild(el('div','empty','Beeld laadt niet'));
+      };
       img.onload=function(){var f=t.querySelector('.empty');if(f)f.parentNode.removeChild(f);};
       t.appendChild(img);
     }else if(k==='video'){
       var v=el('video');v.muted=true;v.setAttribute('muted','');v.autoplay=true;v.loop=true;v.setAttribute('playsinline','');v.src=c.url;t.appendChild(v);
     }else{
-      var f=el('iframe');f.src=c.url;f.setAttribute('tabindex','-1');f.setAttribute('allow','autoplay');t.appendChild(f);
+      var f=el('iframe');f.src=c.url;f.setAttribute('tabindex','-1');f.setAttribute('allow','autoplay');f.style.pointerEvents='none';t.appendChild(f);
     }
     var s=sneeuwVoor(c.area);
     if(s&&(s.berg!=null||s.dal!=null)){
